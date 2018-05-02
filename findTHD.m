@@ -1,19 +1,10 @@
 function [t,th] = findTHD(gamma)
-%UNTITLED5 Summary of this function goes here
-%   Detailed explanation goes here
 
-    %% 半双工时间分配 
-    [k, ~] = size(gamma);
-%     gamma = zeros(1,k);
-%     for i = 1 : k
-%         gamma(i) = real(trace((Hd(i,:) * St * Hd(i,:)'))) * real(trace(Hu(i,:) * Sr * Hu(i,:)'));
-%     end
-    
+    [k, ~] = size(gamma);   
     t = zeros(1, k + 1);
     z_max = 100000.0;
     z_min = 0;
     gamma_sum = sum(gamma);
-    time_left = 1;
     while(z_max - z_min >= 0.0001)
         z = (z_max + z_min) / 2;
         if((1 + z) * log(1 + z) - z > gamma_sum)

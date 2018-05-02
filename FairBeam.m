@@ -1,4 +1,4 @@
-function [ hd, UL ] = FairBeam(H, td, tu, x, pNoise, D, hu)
+function [ hd, UL, St ] = FairBeam(H, td, tu, x, pNoise, D, hu)
 %UNTITLED Summary of this function goes here
 %   Detailed explanation goes here
     [k, n] = size(H);

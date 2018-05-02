@@ -1,32 +1,40 @@
 clear all;
-% ÌìÏßÊýÄ¿
+
+% %
+% Solving Sum-throughput optimization by using SCA approach.
+
+
+% Nt : Numbers of anteenas at the transmitter.
+% k: Numbers of users.
+% alpha: path-loss factor.
+% Data: throughput requirement in the DL transmission.
+% Functions required :
+% 1. SumOptimization, solve the sum throughput with beamforming fixed.
+% 2. MaxBeam, solve the sum throughput with time-slots and PS factors fixed.
+%
+%%
 Nt = 3; 
-
-% ÓÃ»§ÊýÄ¿
 k = 5;
-
-% Â·¾¶ËðºÄ
 alpha = 1;
 
-% ÓÃ»§¾àÀë
-distance = [2, 3, 4, 5, 6];
+% ï¿½Ã»ï¿½ï¿½ï¿½ï¿½ï¿½
+distance = [2, 2, 2, 3, 3];
 
-% ÐÅµÀ
+% ï¿½Åµï¿½
 H = randn(k, Nt) + randn(k, Nt) * 1i;
 
-% ÏÂÐÐÊý¾ÝÁ¿Ô¼Êø
-Data = [0.1, 0.1, 0.1, 0.1, 0.1];
+% ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ô¼ï¿½ï¿?
+Data = [0.1, 0.1, 0.1, 0.1, 0.1] * 2;
 Data = Data * log(2);
-%ÔëÉù¹¦ÂÊ
-pNoise = 10 ^ (-6);
-
-% ÉÏÐÐÔöÒæ
+%ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
+pNoise = 10 ^ (-7);
+% ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
 hu = ones(size(distance));
 for i = 1: k
 	H(i,:) = H(i,:) * distance(i) ^ (-alpha) * 10 ^ (-1);
-	pu(i) = norm(H(i,:)) ^ 2;
+	%pu(i) = norm(H(i,:)) ^ 2;
 end
-
+pu = getMRC(H, distance, alpha);
 index = 1;
 [St, td, hd] = Init(H, Data, pNoise);
 hu = pu.*hd;
@@ -35,7 +43,7 @@ index = index + 1;
 if(sum(td) >= 1)
 	return
 end
-hd = pu / Nt;
+
 while 1
     
 	[td, tu, x, ThU, ThD] = SumOptimization(hd, hu, Data, pNoise);
@@ -55,8 +63,7 @@ plot(th, '-o');
 hold on;
 
 [hhhh, S] = WPCNBeam(H);
-S
-gamma = hhhh.*pu *10^6;
+gamma = hhhh.*pu /pNoise;
 [t, thh] = findTHD(gamma');
 th2 = ones(size(th)) * sum(thh);
 plot(th2,'-o');

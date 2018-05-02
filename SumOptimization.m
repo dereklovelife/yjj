@@ -1,7 +1,20 @@
 function [ td, tu, x, ThU, ThD ] = SumOptimization( hd, hu, D, pnoise)
-%UNTITLED2 Summary of this function goes here
-%   Detailed explanation goes here
-    [~, n] = size(hd);
+% Solve the sum-throughput maximization problem by using Larange dual
+% approach. 
+% Input:
+% 1. hd: vector, channel power gain in the DL
+% 2. hu: vector, channel power gain in the UL * hd
+% 3. D : vector, throughput constrains in the DL
+% 4. pnoise: power of the noise.
+%  Output:
+% 1. td: vector, DL time slots allocation
+% 2. tu: vector, UL time slots allocation
+% 3. x : vector, PS factors times td.
+% 4. ThU: vector, throughput in the UL
+% 5. ThD: vector, throughput in the DL
+   
+
+[~, n] = size(hd);
     
     lambdaMax = 1000000;
     lambdaMin = 0;
@@ -23,8 +36,6 @@ function [ td, tu, x, ThU, ThD ] = SumOptimization( hd, hu, D, pnoise)
             lambdaMin = lambda;
             continue;
         end
-        
-        %%y = ones(n) * y;
         
         zz = ones(size(hd));
         for i = 1: n

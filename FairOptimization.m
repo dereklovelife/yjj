@@ -4,14 +4,12 @@ function [ td, tu, x, ThU, ThD ] = FairOptimization( hd, hu, D, pnoise)
     [~, n] = size(hd);
     
     
-    step = 0.0001;
+    step = 0.001;
     RMax = 10;
     RMin = 0;
-    tSum_index = 1;
-    sub_index = 1;
     while RMax - RMin > 0.1
         R = (RMax + RMin) / 2;
-        lambda = ones(size(hd)) * 0.01;
+        lambda = ones(size(hd)) ;
         count = 0;
         while (1)
             yy = ones(size(hd));
@@ -28,16 +26,12 @@ function [ td, tu, x, ThU, ThD ] = FairOptimization( hd, hu, D, pnoise)
                 end
                 yy(i) = y;
             end
-            tSum = sum(lambda .* hu./(1+yy) / pnoise);
-            tSum_arr(tSum_index) = tSum;
-            tSum_index = tSum_index + 1;
             
-%             if(tSum > 1)
-%                 a = 1111
-%                 lambda = lambda - step;
-%             end
-            
-            
+            tSum = sum(lambda .* hu ./ (1 + yy));
+            if(tSum >= 1)
+                lambda = lambda - lambda * step * 0.1;
+                continue
+            end
             zz = ones(size(hd));
             for i = 1: n
                 coe = hu(i) / hd(i) * lambda(i);
@@ -46,7 +40,7 @@ function [ td, tu, x, ThU, ThD ] = FairOptimization( hd, hu, D, pnoise)
                 
                 while zMax - zMin > 0.000005
                     z = (zMax + zMin) * 0.5;
-                    if(coe * (1 + z) * log(1 + z) - coe * z > (1 + yy(i)) * (1 - tSum));
+                    if(coe * (1 + z) * log(1 + z) - coe * z > (1 + yy(i))* (1 - tSum));
                         zMax = z;
                     else
                         zMin = z;
@@ -62,11 +56,10 @@ function [ td, tu, x, ThU, ThD ] = FairOptimization( hd, hu, D, pnoise)
             subGradient = ones(size(lambda)) * R - ThU;
             
             
-            if(norm(subGradient) < 0.001)
+            if(norm(subGradient) < 0.1)
                 break;
             end
-            sub_arr(sub_index) = norm(subGradient);
-            sub_index = sub_index + 1;
+            
             count = count + 1;
             if(count > 500)
                 break;
@@ -80,6 +73,7 @@ function [ td, tu, x, ThU, ThD ] = FairOptimization( hd, hu, D, pnoise)
             end
         end
         %sum(td) + sum(tu)
+        
         if (sum(td) + sum(tu) > 1)
             RMax = R;
         else
@@ -92,10 +86,8 @@ function [ td, tu, x, ThU, ThD ] = FairOptimization( hd, hu, D, pnoise)
 %     zz
 %     tSum
     ThU = tu.*log(1+ yy);
+    
+   % ThU = sum(ThU) / n * ones(1, n);
     ThD = td.*log(1+ zz);
-    figure(1)
-    plot(tSum_arr);
-    figure(2)
-    plot(sub_arr);
     
 end

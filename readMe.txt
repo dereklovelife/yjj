@@ -1,0 +1,45 @@
+∑Ω∑®√Ë ˆ£∫
+
+for all:
+1. function [ hu ] = getMRC(H, distance, alpha):
+    return a vector.
+    get the UL power gain for all users after MRC (only consider the channel states, but not the transfer beamforming).
+
+
+2. function [ tu, x] = getTu( td, y, z, hu, hd, pNoise ):
+    return tu, x
+    tu: the UL time slots
+    x: the DL time slots times power splitting factor.
+    
+
+
+for sum-throughput maximization:
+
+1. function [ td, tu, x, ThU, ThD ] = SumOptimization( hd, hu, D, pnoise):
+    optimize the UL/DL time slots, and correspding power splitting factors for sum-throughput maximization.
+    Part of the SCA algrithem.
+
+2. function [ hd, UL, St ] = MaxBeam(H, td, tu, x, pNoise, D, hu):
+    optimize the BS beamforming factor.
+    Part of the SCA algrithem.
+
+3. function [td, tu, x, St, ThU, ThD] = SumSCP( distance, alpha, H, pNoise, Data )
+    optimize the problem by SCA.
+
+for fair-throughput maximization:
+
+1. function [ td, tu, x, ThU, ThD ] = FairOptimization( hd, hu, D, pnoise):
+    optimize the UL/DL time slots, and correspding power splitting factors for fair-throughput maximization.
+    Part of the SCA algrithm.
+
+2. function [ hd, UL, St ] = FairBeam(H, td, tu, x, pNoise, D, hu):
+    optimize the BS beamforming factor.
+    Part of the SCA algrithem.
+
+3. function [td, tu, x, St, ThU, ThD] = FairSCP( distance, alpha, H, pNoise, Data )
+    optimize the problem by SCA.
+
+
+for WPCN mode:
+1. function [ t, thh ] = SumWPCNSCA( distance, alpha, H, pNoise)
+    Sum-throuhput maximization in WPCN mode.

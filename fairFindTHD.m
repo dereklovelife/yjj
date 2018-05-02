@@ -1,12 +1,8 @@
-function [ t, th] = fairFindTHD(Sr, St, Hu, Hd)
+function [ t, th] = fairFindTHD(gamma)
 %UNTITLED2 Summary of this function goes here
 %   Detailed explanation goes here
-%        [~,k] = size(gamma);
-    [k, ~] = size(Hu);
-    gamma = zeros(1,k);
-    for i = 1 : k
-        gamma(i) = real(trace((Hd(i,:) * St * Hd(i,:)'))) * real(trace(Hu(i,:) * Sr * Hu(i,:)'));
-    end
+    [k, ~] = size(gamma);
+    
 	RMax = 20;
     RMin = 0;
     
