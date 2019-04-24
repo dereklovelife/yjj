@@ -1,36 +1,32 @@
-function [th] = SumSCPPlot( distance, alpha, H, pNoise, Data )
-% 通过块坐标下降求解总吞吐量，记录每一次迭代结果并返回
+function [td, tu, x, St, ThU, ThD] = SumSCP( distance, alpha, H, pNoise, Data )
+% 块坐标下降求解总吞吐量
     [k, Nt] = size(H);
     
 
   
     for i = 1: k
         H(i,:) = H(i,:) * distance(i) ^ (-alpha) * 10 ^ (-1);
-        % 涓婅浼犺緭鏃讹紝鍩虹珯鏀跺埌鐨勫姛鐜囧鐩?        %涓嶄娇鐢ㄥ悎骞舵妧鏈?%
+        %  pu(i) = norm(H(i,:)) ^ 2;
     end
-    % mrc后的用户上行功率增益
+    % mrc后的上行功率增益    
     pu = getMRC(H, distance, alpha);
    
     
-    % 
-    % hd represents the signal power received by the UE in the DL
+    
+    % 迭代初始化，只考虑满足下行数据需求，不考虑上行传输
     [St, td, hd] = Init(H, Data, pNoise);
     
-    % hu represents the signal power received byt the BS in the UL
+    % 
     hu = pu.*hd;
     
-    %record the throughput calculated by the SCP
-    
+    % 记录上一次迭代的值
     pre = 0;
     
     % initialize the througput in the UL
     ThU = zeros(size(distance));
     ThD = Data;
     
-    % check if the channel stauts satifies the throughput constrains in the DL.
-    % if not satisfy. The correspoding throughput in the UL is set to be
-    % zero. 
-    %NOTE,  the return value needs to be analysised.
+    % 如果当前
     if(sum(td) >= 1)
         return
     end
@@ -40,14 +36,9 @@ function [th] = SumSCPPlot( distance, alpha, H, pNoise, Data )
     %hd = pu / Nt;
     
     %SCP loop
-    count = 1;
     while 1
         [td, tu, x, ThU, ThD] = SumOptimization(hd, hu, Data, pNoise);
-        th(count) = sum(ThU);
         [hd, ThU, St] = MaxBeam(H, td, tu, x, pNoise, Data, pu);
-        count = count + 1;
-        th(count) = sum(ThU);
-        count = count + 1;
         hu = hd.*pu;
         if(sum(ThU) - pre < 0.005)
             break;

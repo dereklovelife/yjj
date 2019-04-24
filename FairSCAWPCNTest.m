@@ -2,7 +2,7 @@ Nt = 4;
 k = 3;
 alpha = 1;
 
-% ï¿½Ã»ï¿½ï¿½ï¿½ï¿½ï¿½
+% ¾àÀë
 distance = [2, 2, 3];
 H = randn(k, Nt) + randn(k, Nt) * 1i;
 pNoise = 10 ^ (-7);

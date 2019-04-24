@@ -1,6 +1,5 @@
 function [ hu ] = getMRC(H, distance, alpha)
-%UNTITLED 姝ゅ鏄剧ず鏈夊叧姝ゅ嚱鏁扮殑鎽樿
-%   姝ゅ鏄剧ず璇︾粏璇存槑
+% 通过MRC得到上行用户功率增益
     [k, Nt] = size(H);
     
     for i = 1 : k

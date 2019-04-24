@@ -1,6 +1,5 @@
 function [td, tu, x, St, ThU, ThD] = FairSCP( distance, alpha, H, pNoise, Data )
-%UNTITLED3 姝ゅ鏄剧ず鏈夊叧姝ゅ嚱鏁扮殑鎽樿
-%   姝ゅ鏄剧ず璇︾粏璇存槑
+% 通过块坐标下降完成公平性优化
     %hu = ones(size(distance));
     
     [k, Nt] = size(H);
@@ -10,7 +9,7 @@ function [td, tu, x, St, ThU, ThD] = FairSCP( distance, alpha, H, pNoise, Data )
         
     end
     
-    %鍒╃敤鏈?ぇ姣斿悎骞剁殑鏂规硶鏉ュ畬鎴愭帴鏀跺悎骞?    
+    % 通过最大比合并得到用户上行增益（仅仅为上行增益，后面的hu表示下行增益*上行增益）    
     pu = getMRC(H, distance, alpha);
 
    
@@ -25,6 +24,8 @@ function [td, tu, x, St, ThU, ThD] = FairSCP( distance, alpha, H, pNoise, Data )
     if(sum(td) >= 1)
         return
     end
+    
+    % 快坐标迭代
     while 1
         [td, tu, x, ThU, ThD] = FairOptimization(hd, hu, Data, pNoise);
         

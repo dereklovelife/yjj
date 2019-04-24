@@ -12,7 +12,7 @@ clear all;
 % 1. SumOptimization, solve the sum throughput with beamforming fixed.
 % 2. MaxBeam, solve the sum throughput with time-slots and PS factors fixed.
 %
-%
+%%
 Nt = 3; 
 k = 5;
 alpha = 1;
@@ -26,9 +26,9 @@ H = randn(k, Nt) + randn(k, Nt) * 1i;
 % 用户上行数据需求
 Data = [0.1, 0.1, 0.1, 0.1, 0.1] * 2;
 Data = Data * log(2);
-% 噪声功率
+% 信道ze
 pNoise = 10 ^ (-7);
-% 上行
+% 锟斤拷锟斤拷锟斤拷锟斤拷
 hu = ones(size(distance));
 for i = 1: k
 	H(i,:) = H(i,:) * distance(i) ^ (-alpha) * 10 ^ (-1);

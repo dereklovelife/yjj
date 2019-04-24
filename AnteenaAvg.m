@@ -4,22 +4,22 @@
 
 Nt = input('Number of anteena:'); 
 
-% 锟矫伙拷锟斤拷目
+% 用户数目
 k = 3;
 
-% 路锟斤拷锟斤拷锟?
+% 路径损耗因子
 alpha = 1;
 times = 20;
-% 锟矫伙拷锟斤拷锟斤拷
+% 距离
 distance = [2, 2, 3];
 
-% 锟脚碉拷
+% 信道增益
 H = randn(k, Nt) + randn(k, Nt) * 1i;
 
-% 锟斤拷锟斤拷锟斤拷锟斤拷锟皆硷拷锟?
+% 用户下行数据需求
 Data =ones(size(distance)) * 1;
 Data = Data / log(2);
-%锟斤拷锟斤拷锟斤拷
+% 噪声功率
 pNoise = 10 ^ (-7);
 sth = 0;
 msth = 0;
